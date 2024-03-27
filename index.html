@@ -6,12 +6,20 @@
   <link rel="icon" type="image/svg+xml" href="/src/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TinyHabitRPG</title>
+  <script type="importmap">
+    {
+      "imports": {
+        "pages/": "./pages/",
+        "modules/": "./modules/"
+      }
+    }
+  </script>
 </head>
 
 <body>
   <main></main>
   <script src="https://cdn.jsdelivr.net/npm/ractive"></script>
-  <script src="index.js"></script>
+  <script type="module" src="index.js"></script>
 </body>
 
 </html>
