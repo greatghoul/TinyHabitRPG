@@ -54,6 +54,10 @@ const TodoItem = Ractive.extend({
       white-space: pre-wrap;
       overflow-wrap: break-word;
     }
+
+    .text-column a {
+      text-decoration: none;
+    }
   `,
   data: function () {
     return {
@@ -64,7 +68,15 @@ const TodoItem = Ractive.extend({
     todoText: {
       get() {
         const todo = this.get('todo');
-        return marked.parseInline(todo.text);
+        const todoText = marked.parseInline(todo.text);
+        const aTags = todoText.match(/<a\s[^>]*href="[^"]*"[^>]*>.*?<\/a>/g);
+        if (aTags) {
+          const modifiedATags = todoText.replace(/<a\s[^>]*href="([^"]*)"[^>]*>([^<]*)<\/a>/g, '<a href="$1" target="_blank">$2</a>');
+          return modifiedATags;
+          return modifiedATags;
+        } else {
+          return todoText;
+        }
       },
     },
   },

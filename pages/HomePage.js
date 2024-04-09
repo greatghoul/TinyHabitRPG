@@ -9,7 +9,7 @@ const HomePage = Ractive.extend({
   },
   template: `
     <h1>Todos</h1>
-    <input type="text" class="input-new" on-keydown='handleInput' />
+    <input type="text" class="input-new" on-keydown='handleInput' value={{inputValue}} />
     <ul class="todo-list">
       {{#each todos as todo}}
         <TodoItem todo={{todo}} />
@@ -37,12 +37,14 @@ const HomePage = Ractive.extend({
       .getUserTasks({ type: "todos" })
       .then(todos => this.set({ todos }))
   },
-  handleInput: function (ctx, e) {
-    if (e.key === 'Enter') {
-      console.log(this.get('inputValue'));
-      this.set('inputValue', '');
-    }
-  },
+  on: {
+    handleInput: function (ctx) {
+      if (ctx.event.key === 'Enter') {
+        alert(this.get('inputValue'));
+        this.set('inputValue', '');
+      }
+    },
+  }
 });
 
 export default HomePage;
