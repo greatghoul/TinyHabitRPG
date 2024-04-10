@@ -33,17 +33,29 @@ const HomePage = Ractive.extend({
     };
   },
   oninit: function () {
-    taskService
-      .getUserTasks({ type: "todos" })
-      .then(todos => this.set({ todos }))
+    this.fetchTodos();
   },
   on: {
     handleInput: function (ctx) {
-      if (ctx.event.key === 'Enter') {
-        alert(this.get('inputValue'));
-        this.set('inputValue', '');
-      }
+      if (ctx.event.key != "Enter") return;
+
+      const text = this.get("inputValue").trim();
+      if (!text) return;
+
+      this.createTodo(text)
+        .then(() => this.set("inputValue", ""))
     },
+  },
+  createTodo: function (text) {
+    const type = "todo";
+    return taskService
+      .createUserTask({ type, text })
+      .then(todo => this.unshift("todos", todo));
+  },
+  fetchTodos: function () {
+    return taskService
+      .getUserTasks({ type: "todos" })
+      .then(todos => this.set({ todos }))
   }
 });
 
