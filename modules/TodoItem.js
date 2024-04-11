@@ -1,10 +1,17 @@
+import TaskService from "services/TaskService.js"; 
+
+const taskService = new TaskService();
 const TodoItem = Ractive.extend({
   template: `
     {{#with todo}}
-      <li class="todo">
+      <li class="todo" class-done="completed">
         <div class="columns">
           <label class="checkbox-column">
-            <input type="checkbox" name="completed" {{#completed}}checked{{/completed}} />
+            <input
+              type="checkbox"
+              checked="{{completed}}"
+              on-change="handleChange"
+            />
           </label>
           <div class="text-column">
             <span>{{{todoText}}}</span>
@@ -21,8 +28,16 @@ const TodoItem = Ractive.extend({
       transition: background-color 0.3s ease;
     }
 
+    .todo.done {
+      background-color: #e2e2e2;
+    }
+
     .todo:hover {
       background-color: #d0ebff;
+    }
+
+    .todo.done:hover {
+      background-color: #d2d2d2;
     }
 
     .columns {
@@ -39,6 +54,10 @@ const TodoItem = Ractive.extend({
       padding: 5px 3px;
     }
 
+    .todo.done .checkbox-column {
+      background-color: lightgray;
+    }
+
     .checkbox-column input {
       width: 14px;
       height: 14px;
@@ -53,6 +72,10 @@ const TodoItem = Ractive.extend({
       word-wrap: break-word;
       white-space: pre-wrap;
       overflow-wrap: break-word;
+    }
+
+    .todo.done .text-column {
+      text-decoration: line-through;
     }
 
     .text-column a {
@@ -80,6 +103,14 @@ const TodoItem = Ractive.extend({
       },
     },
   },
+  on: {
+    handleChange: function () {
+      const todo = this.get('todo');
+      const taskId = todo.id;
+      const direction = todo.completed ? 'up' : 'down';
+      taskService.scoreTask({ taskId, direction });
+    },
+  }
 });
 
 export default TodoItem;
