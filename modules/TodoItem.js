@@ -85,6 +85,7 @@ const TodoItem = Ractive.extend({
   data: function () {
     return {
       todo: null,
+      position: null,
     };
   },
   computed: {
@@ -106,9 +107,11 @@ const TodoItem = Ractive.extend({
   on: {
     handleChange: function () {
       const todo = this.get('todo');
+      const position = this.get('position');
       const taskId = todo.id;
       const direction = todo.completed ? 'up' : 'down';
-      taskService.scoreTask({ taskId, direction });
+      taskService.scoreTask({ taskId, direction })
+        .then(() => !todo.completed && taskService.moveTask({ taskId, position }))
     },
   }
 });

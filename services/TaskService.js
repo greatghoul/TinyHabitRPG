@@ -9,8 +9,12 @@ class TaskService extends Habitica {
     return this.api().post("/tasks/user", params);
   }
 
-  scoreTask(params) {
-    return this.api().post(`/tasks/${params.taskId}/score/${params.direction}`);
+  scoreTask({ taskId, direction }) {
+    return this.api().post(`/tasks/${taskId}/score/${direction}`);
+  }
+
+  moveTask({ taskId, position }) {
+    return this.api().post(`/tasks/${taskId}/move/to/${position}`);
   }
 }
 

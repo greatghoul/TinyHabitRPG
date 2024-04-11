@@ -11,8 +11,8 @@ const HomePage = Ractive.extend({
     <h1>Todos</h1>
     <input type="text" class="input-new" on-keydown='handleInput' value={{inputValue}} />
     <ul class="todo-list">
-      {{#each todos as todo}}
-        <TodoItem todo={{todo}} />
+      {{#each todos as todo: index}}
+        <TodoItem todo={{todo}} position={{index}} />
       {{/each}}
     </ul>
   `,
