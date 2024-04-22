@@ -1,20 +1,27 @@
 import TaskService from "services/TaskService.js";
 import TodoItem from "modules/TodoItem.js";
+import Loading from "modules/Loading.js";
 
 const taskService = new TaskService();
 
 const HomePage = Ractive.extend({
   components: {
     TodoItem,
+    Loading,
   },
   template: `
     <h1>Todos</h1>
     <input type="text" class="input-new" on-keydown='handleInput' value={{inputValue}} />
-    <ul class="todo-list">
-      {{#each todos as todo: index}}
-        <TodoItem todo={{todo}} position={{index}} />
-      {{/each}}
-    </ul>
+    <button on-click="handleRefresh" disabled="{{fetching}}">Refresh</button>
+    {{#if loaded}}
+      <ul class="todo-list">
+        {{#each todos as todo: index}}
+          <TodoItem todo={{todo}} position={{index}} />
+        {{/each}}
+      </ul>
+    {{else}}
+      <Loading />
+    {{/if}}
   `,
   css: `
     .todo-list {
@@ -29,11 +36,13 @@ const HomePage = Ractive.extend({
   data: function () {
     return {
       todos: [],
-      inputValue: '',
+      inputValue: "",
+      fetching: false,
+      loaded: false,
     };
   },
   oninit: function () {
-    this.fetchTodos();
+    this.fetchTodos().then(() => this.set("loaded", true))
   },
   on: {
     handleInput: function (ctx) {
@@ -44,6 +53,9 @@ const HomePage = Ractive.extend({
 
       this.createTodo(text);
     },
+    handleRefresh: function (ctx) {
+      this.fetchTodos();
+    }
   },
   createTodo: function (text) {
     const type = "todo";
@@ -65,9 +77,11 @@ const HomePage = Ractive.extend({
       });
   },
   fetchTodos: function () {
+    this.set('fetching', true);
     return taskService
       .getUserTasks({ type: "todos" })
       .then(todos => this.set({ todos }))
+      .then(() => this.set('fetching', false));
   }
 });
 
