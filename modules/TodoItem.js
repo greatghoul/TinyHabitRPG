@@ -10,12 +10,13 @@ const TodoItem = Ractive.extend({
             <input
               type="checkbox"
               checked="{{completed}}"
+              disabled="{{holding}}"
               on-change="handleChange"
             />
           </label>
           <div class="text-column">
             <span>{{{todoText}}}</span>
-          </div>
+          </div>test
         </div>
       </li>
     {{/with}}
@@ -96,7 +97,6 @@ const TodoItem = Ractive.extend({
         const aTags = todoText.match(/<a\s[^>]*href="[^"]*"[^>]*>.*?<\/a>/g);
         if (aTags) {
           const modifiedATags = todoText.replace(/<a\s[^>]*href="([^"]*)"[^>]*>([^<]*)<\/a>/g, '<a href="$1" target="_blank">$2</a>');
-          return modifiedATags;
           return modifiedATags;
         } else {
           return todoText;

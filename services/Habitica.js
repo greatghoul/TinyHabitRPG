@@ -24,6 +24,12 @@ class Habitica {
       return JSON.parse(user);
     }
   }
+
+  randomToken(prefix) {
+    const time = Date.now();
+    const tail = Math.random().toString(36).substring(2, 8);
+    return `${prefix}-${time}-${tail}`;
+  }
 }
 
 export default Habitica;

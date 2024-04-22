@@ -42,15 +42,27 @@ const HomePage = Ractive.extend({
       const text = this.get("inputValue").trim();
       if (!text) return;
 
-      this.createTodo(text)
-        .then(() => this.set("inputValue", ""))
+      this.createTodo(text);
     },
   },
   createTodo: function (text) {
     const type = "todo";
+    const todoHolder = {
+      text,
+      id: taskService.randomToken('todo'),
+      completed: false,
+      holding: true
+    };
+
+    this.unshift("todos", todoHolder);
+    this.set("inputValue", "");
+
     return taskService
       .createUserTask({ type, text })
-      .then(todo => this.unshift("todos", todo));
+      .then(todo => {
+        const index = this.get("todos").findIndex(x => x.id == todoHolder.id);
+        this.splice("todos", index, 1, todo);
+      });
   },
   fetchTodos: function () {
     return taskService
