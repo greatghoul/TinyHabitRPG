@@ -16,7 +16,7 @@ const TodoItem = Ractive.extend({
           </label>
           <div class="text-column">
             <span>{{{todoText}}}</span>
-          </div>test
+          </div>
         </div>
       </li>
     {{/with}}

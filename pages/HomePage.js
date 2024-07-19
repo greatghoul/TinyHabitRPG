@@ -1,6 +1,7 @@
 import TaskService from "services/TaskService.js";
 import TodoItem from "modules/TodoItem.js";
 import Loading from "modules/Loading.js";
+import NavItem from "modules/NavItem.js";
 
 const taskService = new TaskService();
 
@@ -8,22 +9,74 @@ const HomePage = Ractive.extend({
   components: {
     TodoItem,
     Loading,
+    NavItem,
   },
   template: `
-    <h1>Todos</h1>
-    <input type="text" class="input-new" on-keydown='handleInput' value={{inputValue}} />
-    <button on-click="handleRefresh" disabled="{{fetching}}">Refresh</button>
-    {{#if loaded}}
-      <ul class="todo-list">
-        {{#each todos as todo: index}}
-          <TodoItem todo={{todo}} position={{index}} />
-        {{/each}}
-      </ul>
-    {{else}}
-      <Loading />
-    {{/if}}
+    <div class="home-page">
+      <div class="side">
+        <div class="head">Tiny Habit RPG</div>
+        <div class="body">
+          <NavItem title="Todos" />
+        </div>
+      </div>
+      <div class="main">
+        <div class="head">
+          <span>Todos</span>
+          <div class="pull-right">
+            <button on-click="handleRefresh" disabled="{{fetching}}">Refresh</button>
+          </div>
+        </div>
+        <div class="body">
+          <input type="text" class="input-new" on-keydown='handleInput' value={{inputValue}} />
+          {{#if loaded}}
+            <ul class="todo-list">
+              {{#each todos as todo: index}}
+                <TodoItem todo={{todo}} position={{index}} />
+              {{/each}}
+            </ul>
+          {{else}}
+            <Loading />
+          {{/if}}
+        </div>
+      </div>
+    </div>
   `,
   css: `
+    .home-page {
+      display: flex;
+    }
+
+    .side {
+      width: 120px;
+      background-color: #FEFAE0;
+    }
+
+    .main {
+      flex: 1;
+    }
+
+    .pull-right {
+      float: right;
+    }
+
+    .head {
+      font-size: 12px;
+      font-weight: bold;
+      height: 30px;
+      line-height: 30px;
+      background-color: #FAEDCD;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    .body {
+      padding: 10px;
+    }
+
+    .main .head {
+      background-color: #E9EDC9;
+    }
+
     .todo-list {
       padding: 0;
     }
