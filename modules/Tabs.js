@@ -21,7 +21,7 @@ const Tabs = Ractive.extend({
       <div class="tabs-body">
         {{#each tabs as tab}}
           <div class="tab-pane" class-active="tab.key == activeKey">
-            {{> tab.key }}
+            {{yield tab.key }}
           </div>
         {{/each}}
       </div>
