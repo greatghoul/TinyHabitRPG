@@ -2,6 +2,7 @@ import TaskService from "services/TaskService.js";
 import TodoItem from "modules/TodoItem.js";
 import Loading from "modules/Loading.js";
 import NavItem from "modules/NavItem.js";
+import Tabs from "modules/Tabs.js";
 
 const taskService = new TaskService();
 
@@ -10,6 +11,7 @@ const HomePage = Ractive.extend({
     TodoItem,
     Loading,
     NavItem,
+    Tabs,
   },
   template: `
     <div class="home-page">
@@ -27,7 +29,14 @@ const HomePage = Ractive.extend({
           </div>
         </div>
         <div class="body">
-          <input type="text" class="input-new" on-keydown='handleInput' value={{inputValue}} />
+          <Tabs tabs={{tabs}}>
+            {{#partial taskNew}}
+              <input type="text" class="input-new" on-keydown='handleInput' value={{inputValue}} />
+            {{/partial}}
+            {{#partial taskSearch}}
+              Foo Bar
+            {{/partial}}
+          </Tabs>
           {{#if loaded}}
             <ul class="todo-list">
               {{#each todos as todo: index}}
@@ -64,7 +73,6 @@ const HomePage = Ractive.extend({
       font-weight: bold;
       height: 30px;
       line-height: 30px;
-      background-color: #FAEDCD;
       padding-left: 10px;
       padding-right: 10px;
     }
@@ -73,12 +81,13 @@ const HomePage = Ractive.extend({
       padding: 10px;
     }
 
-    .main .head {
+    .main > .head {
       background-color: #E9EDC9;
     }
 
     .todo-list {
       padding: 0;
+      margin: 0;
     }
     .input-new {
       width: 100%;
@@ -92,6 +101,10 @@ const HomePage = Ractive.extend({
       inputValue: "",
       fetching: false,
       loaded: false,
+      tabs: [
+        { title: 'New', key: 'taskNew' },
+        { title: 'Search', key: 'taskSearch' },
+      ],
     };
   },
   oninit: function () {
