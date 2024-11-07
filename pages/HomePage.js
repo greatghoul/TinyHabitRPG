@@ -19,6 +19,7 @@ const HomePage = Ractive.extend({
         <div class="head">Tiny Habit RPG</div>
         <div class="body">
           <NavItem title="Todos" />
+          <NavItem title="Dailies" />
         </div>
       </div>
       <div class="main">
@@ -32,9 +33,6 @@ const HomePage = Ractive.extend({
           <Tabs tabs={{tabs}}>
             {{#partial taskNew}}
               <input type="text" class="input-new" on-keydown='handleInput' value={{inputValue}} />
-            {{/partial}}
-            {{#partial taskSearch}}
-              Foo Bar
             {{/partial}}
           </Tabs>
           {{#if loaded}}
@@ -103,7 +101,7 @@ const HomePage = Ractive.extend({
       loaded: false,
       tabs: [
         { title: 'New', key: 'taskNew' },
-        { title: 'Search', key: 'taskSearch' },
+        // { title: 'Search', key: 'taskSearch' },
       ],
     };
   },

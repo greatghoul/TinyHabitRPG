@@ -16,6 +16,7 @@ const NavItem = Ractive.extend({
       border: 0;
       cursor: pointer;
       background-color: #FAEDCD;
+      margin-bottom: 3px;
     }
     .nav-item:hover {
       background-color: #F0E6D3;
