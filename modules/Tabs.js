@@ -63,7 +63,7 @@ const Tabs = Ractive.extend({
       display: none;
     }
 
-    .body .tab-pane.active {
+    .tab-pane.active {
       display: block;
     }
   `,
