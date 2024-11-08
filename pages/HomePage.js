@@ -1,22 +1,35 @@
 import NavItem from "modules/NavItem.js";
 import TodosPage from "pages/TodosPage.js";
+import DailiesPage from "pages/DailiesPage.js";
 
 const HomePage = Ractive.extend({
   components: {
     NavItem,
     TodosPage,
+    DailiesPage,
+  },
+  data: function () {
+    return {
+      pages: [
+        { key: 'todos', title: 'Todos' },
+        { key: 'dailies', title: 'Dailies' },
+      ],
+      page: 'todos',
+    };
   },
   template: `
     <div class="home-page">
       <div class="side">
         <div class="head">Tiny Habit RPG</div>
         <div class="body">
-          <NavItem title="Todos" />
-          <NavItem title="Dailies" />
+          {{#each pages}}
+            <NavItem title="{{title}}" key="{{key}}" active="{{key == page}}" />
+          {{/each}}
         </div>
       </div>
       <div class="main">
         {{#partial todos}}<TodosPage />{{/partial}}
+        {{#partial dailies}}<DailiesPage />{{/partial}}
 
         {{> page}}
       </div>
@@ -61,13 +74,12 @@ const HomePage = Ractive.extend({
       padding: 0;
       margin: 0;
     }
-
   `,
-  data: function () {
-    return {
-      page: 'todos',
-    };
-  },
+  on: {
+    'NavItem.actived': function (ctx, page) {
+      this.set('page', page);
+    }
+  }
 });
 
 export default HomePage;

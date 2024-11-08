@@ -2,11 +2,12 @@ const NavItem = Ractive.extend({
   data: function () {
     return {
       title: null,
+      key: null,
       active: false,
     };
   },
   template: `
-    <button class="nav-item">{{ title }}</button>
+    <button class="nav-item" class-active="active" on-click="click">{{ title }}</button>
   `,
   css: `
     .nav-item {
@@ -21,10 +22,17 @@ const NavItem = Ractive.extend({
     .nav-item:hover {
       background-color: #F0E6D3;
     }
-    .nav-item:active {
+    .nav-item:active,
+    .nav-item.active {
       background-color: #E6DAC2;
     }
-  `
+
+  `,
+  on: {
+    click: function () {
+      this.fire('actived', this.get('key'));
+    },
+  }
 });
 
 export default NavItem;
