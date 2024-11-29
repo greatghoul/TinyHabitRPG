@@ -87,7 +87,9 @@ const DailiesPage = Page.extend({
     this.set('fetching', true);
     return taskService
       .getUserTasks({ type: 'dailys' })
-      .then(dailies => this.set({ dailies }))
+      .then(dailies => dailies.filter(daily => !daily.completed))
+      .then(activeDailies => activeDailies.sort((a, b) => new Date(a.nextDue[0]) - new Date(b.nextDue[0])))
+      .then(sortedActiveDailies => this.set({ dailies: sortedActiveDailies }))
       .then(() => this.set('fetching', false));
   }
 });

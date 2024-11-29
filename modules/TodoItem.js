@@ -16,6 +16,9 @@ const TodoItem = Ractive.extend({
           </label>
           <div class="text-column">
             <span>{{{todoText}}}</span>
+            {{#if type == 'daily'}}
+              <span class="due_days" title={{dueDays.title}}>{{dueDays.text}}</span>
+            {{/if}}
           </div>
         </div>
       </li>
@@ -82,6 +85,13 @@ const TodoItem = Ractive.extend({
     .text-column a {
       text-decoration: none;
     }
+
+    .due_days {
+      background-color: #D4A373;
+      color: #FEFAE0;
+      padding: 1px 5px;
+      font-size: 0.8em;
+    }
   `,
   data: function () {
     return {
@@ -100,6 +110,21 @@ const TodoItem = Ractive.extend({
           return modifiedATags;
         } else {
           return todoText;
+        }
+      },
+    },
+    dueDays: {
+      get() {
+        const todo = this.get('todo');
+        const nextDueDate = new Date(todo.nextDue[0]);
+        const currentDate = new Date();
+        const timeDiff = nextDueDate - currentDate;
+        const dayDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+        const title = nextDueDate.toLocaleDateString();
+        if (dayDiff === 0) {
+          return { title, text: 'today' };
+        } else {
+          return { title, text: `${dayDiff}d` };
         }
       },
     },
