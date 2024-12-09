@@ -3,18 +3,20 @@ import Page from "modules/Page.js";
 import Loading from "modules/Loading.js";
 import Tabs from "modules/Tabs.js";
 import TodoItem from "modules/TodoItem.js";
+import TaskTodo from "modules/TaskTodo.js";
 import TodoFormNew from "modules/TodoFormNew.js";
 
 
 const taskService = new TaskService();
 
-const TodosPage = Page.extend({
+const TaskTodosPage = Ractive.extend({
   components: {
     Page,
     Loading,
     Tabs,
     TodoFormNew,
     TodoItem,
+    TaskTodo,
   },
   data: function() {
     return {
@@ -22,8 +24,8 @@ const TodosPage = Page.extend({
       loaded: false,
       todos: [],
       tabs: [
-        { title: 'New', key: 'taskNew' },
-        // { title: 'Search', key: 'taskSearch' },
+        { title: "New", key: "taskNew" },
+        // { title: "Search", key: "taskSearch" },
       ],
     };
   },
@@ -41,8 +43,8 @@ const TodosPage = Page.extend({
         </Tabs>
         {{#if loaded}}
           <ul class="todo-list">
-            {{#each todos as todo: index}}
-              <TodoItem todo={{todo}} position={{index}} />
+            {{#each tasks as task: index}}
+              <TaskTodo task={{task}} position={{index}} />
             {{/each}}
           </ul>
         {{else}}
@@ -55,40 +57,40 @@ const TodosPage = Page.extend({
   `,
   on: {
     init() {
-      this.fetchTodos().then(() => this.set("loaded", true))
+      this.fetchTasks().then(() => this.set("loaded", true))
     },
     refresh: function (ctx) {
-      this.fetchTodos();
+      this.fetchTasks();
     },
     "TodoFormNew.submit": function (ctx, text) {
-      this.createTodo(text);
+      this.createTask(text);
     },
   },
-  createTodo: function (text) {
+  createTask: function (text) {
     const type = "todo";
-    const todoHolder = {
+    const taskHolder = {
       text,
-      id: taskService.randomToken('todo'),
+      id: taskService.randomToken("todo"),
       completed: false,
       holding: true
     };
 
-    this.unshift("todos", todoHolder);
+    this.unshift("tasks", taskHolder);
 
     return taskService
       .createUserTask({ type, text })
       .then(todo => {
-        const index = this.get("todos").findIndex(x => x.id == todoHolder.id);
-        this.splice("todos", index, 1, todo);
+        const index = this.get("tasks").findIndex(x => x.id == taskHolder.id);
+        this.splice("tasks", index, 1, todo);
       });
   },
-  fetchTodos: function () {
-    this.set('fetching', true);
+  fetchTasks: function () {
+    this.set("fetching", true);
     return taskService
       .getUserTasks({ type: "todos" })
-      .then(todos => this.set({ todos }))
-      .then(() => this.set('fetching', false));
+      .then(tasks => this.set({ tasks }))
+      .then(() => this.set("fetching", false));
   }
 });
 
-export default TodosPage;
+export default TaskTodosPage;

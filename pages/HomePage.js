@@ -1,23 +1,23 @@
 import NavItem from "modules/NavItem.js";
-import TodosPage from "pages/TodosPage.js";
+import TaskTodosPage from "pages/TaskTodosPage.js";
 import DailiesPage from "pages/DailiesPage.js";
 import HabitsPage from "pages/HabitsPage.js";
 
 const HomePage = Ractive.extend({
   components: {
     NavItem,
-    TodosPage,
+    TaskTodosPage,
     DailiesPage,
     HabitsPage,
   },
   data: function () {
     return {
       pages: [
-        { key: 'todos', title: 'Todos' },
-        { key: 'dailies', title: 'Dailies' },
-        { key: 'habits', title: 'Habits' },
+        { key: "todos", title: "Todos" },
+        { key: "dailies", title: "Dailies" },
+        { key: "habits", title: "Habits" },
       ],
-      page: 'todos',
+      page: "todos",
     };
   },
   template: `
@@ -31,7 +31,7 @@ const HomePage = Ractive.extend({
         </div>
       </div>
       <div class="main">
-        {{#partial todos}}<TodosPage />{{/partial}}
+        {{#partial todos}}<TaskTodosPage />{{/partial}}
         {{#partial dailies}}<DailiesPage />{{/partial}}
         {{#partial habits}}<HabitsPage />{{/partial}}
 
@@ -80,8 +80,8 @@ const HomePage = Ractive.extend({
     }
   `,
   on: {
-    'NavItem.actived': function (ctx, page) {
-      this.set('page', page);
+    "NavItem.actived": function (ctx, page) {
+      this.set("page", page);
     }
   }
 });
