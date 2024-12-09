@@ -1,18 +1,21 @@
 import NavItem from "modules/NavItem.js";
 import TodosPage from "pages/TodosPage.js";
 import DailiesPage from "pages/DailiesPage.js";
+import HabitsPage from "pages/HabitsPage.js";
 
 const HomePage = Ractive.extend({
   components: {
     NavItem,
     TodosPage,
     DailiesPage,
+    HabitsPage,
   },
   data: function () {
     return {
       pages: [
         { key: 'todos', title: 'Todos' },
         { key: 'dailies', title: 'Dailies' },
+        { key: 'habits', title: 'Habits' },
       ],
       page: 'todos',
     };
@@ -30,6 +33,7 @@ const HomePage = Ractive.extend({
       <div class="main">
         {{#partial todos}}<TodosPage />{{/partial}}
         {{#partial dailies}}<DailiesPage />{{/partial}}
+        {{#partial habits}}<HabitsPage />{{/partial}}
 
         {{> page}}
       </div>
