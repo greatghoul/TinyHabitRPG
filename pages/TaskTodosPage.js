@@ -2,7 +2,6 @@ import TaskService from "services/TaskService.js";
 import Page from "modules/Page.js";
 import Loading from "modules/Loading.js";
 import Tabs from "modules/Tabs.js";
-import TodoItem from "modules/TodoItem.js";
 import TaskTodo from "modules/TaskTodo.js";
 import TodoFormNew from "modules/TodoFormNew.js";
 
@@ -15,7 +14,6 @@ const TaskTodosPage = Ractive.extend({
     Loading,
     Tabs,
     TodoFormNew,
-    TodoItem,
     TaskTodo,
   },
   data: function() {
@@ -42,7 +40,7 @@ const TaskTodosPage = Ractive.extend({
           {{/partial}}
         </Tabs>
         {{#if loaded}}
-          <ul class="todo-list">
+          <ul class="todo-list" style="vertical-scroll: auto;">
             {{#each tasks as task: index}}
               <TaskTodo task={{task}} position={{index}} />
             {{/each}}

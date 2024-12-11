@@ -20,6 +20,9 @@ const Page = Ractive.extend({
   css: `
     .page {
       flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
     }
 
     .pull-right {
@@ -37,7 +40,9 @@ const Page = Ractive.extend({
     }
 
     .page-body {
+      flex: 1;
       padding: 10px;
+      overflow-y: auto;
     }
   `,
 });

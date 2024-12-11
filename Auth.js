@@ -1,4 +1,4 @@
-const LoginPage = Ractive.extend({
+export default Ractive.extend({
   data() {
     return {
       username: '',
@@ -50,5 +50,3 @@ const LoginPage = Ractive.extend({
     }
   },
 });
-
-export default LoginPage;

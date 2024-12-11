@@ -30,7 +30,9 @@ const NavItem = Ractive.extend({
   `,
   on: {
     click: function () {
-      this.fire('actived', this.get('key'));
+      const key = this.get('key');
+      this.fire('actived', key);
+      window.location.hash = key;
     },
   }
 });

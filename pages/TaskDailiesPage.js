@@ -3,19 +3,22 @@ import Page from "modules/Page.js";
 import Loading from "modules/Loading.js";
 import Tabs from "modules/Tabs.js";
 import TodoItem from "modules/TodoItem.js";
+import TaskDaily from "modules/TaskDaily.js";
 import TodoFormNew from "modules/TodoFormNew.js";
 
-const TASK_TYPE = 'daily';
+const TASK_TYPE_CREATE = 'daily';
+const TASK_TYPE_FETCH = 'dailys';
 
 const taskService = new TaskService();
 
-const DailiesPage = Page.extend({
+const TaskDailiesPage = Page.extend({
   components: {
     Page,
     Loading,
     Tabs,
     TodoFormNew,
     TodoItem,
+    TaskDaily,
   },
   data: function() {
     return {
@@ -41,9 +44,10 @@ const DailiesPage = Page.extend({
           {{/partial}}
         </Tabs>
         {{#if loaded}}
+          <h4 class="tasks-list-title">Due Today</h4>
           <ul class="todo-list">
-            {{#each dailies as daily: index}}
-              <TodoItem todo={{daily}} position={{index}} />
+            {{#each tasks as task: index}}
+              <TaskDaily task={{task}} position={{index}} />
             {{/each}}
           </ul>
         {{else}}
@@ -53,45 +57,49 @@ const DailiesPage = Page.extend({
     </Page>
   `,
   css: `
+    h4 {
+      margin: 0 0 5px 0;
+      padding: 0;
+    }
   `,
   on: {
     init() {
-      this.fetchDailies().then(() => this.set("loaded", true))
+      this.fetchTasks().then(() => this.set("loaded", true))
     },
     refresh: function (ctx) {
-      this.fetchDailies();
+      this.fetchTasks();
     },
     "TodoFormNew.submit": function (ctx, text) {
-      this.createDaily(text);
+      this.createTask(text);
     },
   },
-  createDaily: function (text) {
-    const type = TASK_TYPE;
-    const dailyHolder = {
+  createTask: function (text) {
+    const type = TASK_TYPE_CREATE;
+    const taskHolder = {
       text,
-      id: taskService.randomToken(TASK_TYPE),
+      id: taskService.randomToken(TASK_TYPE_CREATE),
       completed: false,
       holding: true
     };
 
-    this.unshift("dailies", todoHolder);
+    this.unshift("tasks", taskHolder);
 
     return taskService
       .createUserTask({ type, text })
-      .then(todo => {
-        const index = this.get("dailies").findIndex(x => x.id == dailyHolder.id);
-        this.splice("dailies", index, 1, todo);
+      .then(task => {
+        const index = this.get("tasks").findIndex(x => x.id == taskHolder.id);
+        this.splice("tasks", index, 1, task);
       });
   },
-  fetchDailies: function () {
+  fetchTasks: function () {
     this.set('fetching', true);
     return taskService
-      .getUserTasks({ type: 'dailys' })
-      .then(dailies => dailies.filter(daily => !daily.completed))
-      .then(activeDailies => activeDailies.sort((a, b) => new Date(a.nextDue[0]) - new Date(b.nextDue[0])))
-      .then(sortedActiveDailies => this.set({ dailies: sortedActiveDailies }))
+      .getUserTasks({ type: TASK_TYPE_FETCH })
+      .then(tasks => tasks.filter(task => task.isDue))
+      .then(tasks => tasks.sort((a, b) => new Date(a.nextDue[0]) - new Date(b.nextDue[0])))
+      .then(tasks => this.set({ tasks }))
       .then(() => this.set('fetching', false));
   }
 });
 
-export default DailiesPage;
+export default TaskDailiesPage;

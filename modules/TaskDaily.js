@@ -2,14 +2,16 @@ import TaskService from "services/TaskService.js";
 import TaskItem from "modules/TaskItem.js";
 import TaskCheck from "modules/TaskCheck.js";
 import TaskText from "modules/TaskText.js";
+import TaskDue from "modules/TaskDue.js";
 
 const taskService = new TaskService();
 
-const TaskTodo = Ractive.extend({
+const TaskDaily = Ractive.extend({
   components: {
     TaskItem,
     TaskCheck,
-    TaskText
+    TaskText,
+    TaskDue,
   },
   template: `
     <TaskItem>
@@ -42,4 +44,4 @@ const TaskTodo = Ractive.extend({
   }
 });
 
-export default TaskTodo;
+export default TaskDaily;
