@@ -11,7 +11,7 @@ new Ractive({
     {{#if user}}
       <Main />
     {{else}}
-      <Auth />
+      <Auth on-login="@this.loadUser()" />
     {{/if}}
   `,
   oninit: function() {
