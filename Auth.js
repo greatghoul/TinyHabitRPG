@@ -34,7 +34,6 @@ export default Ractive.extend({
       })
         .then(res => res.json())
         .then(data => {
-          console.log('success', data);
           if (data.success) {
             window.localStorage.setItem('user', JSON.stringify(data.data));
             window.location.hash = '#/home';

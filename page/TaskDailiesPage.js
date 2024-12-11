@@ -1,10 +1,10 @@
 import TaskService from "services/TaskService.js";
-import Page from "modules/Page.js";
-import Loading from "modules/Loading.js";
-import Tabs from "modules/Tabs.js";
-import TodoItem from "modules/TodoItem.js";
-import TaskDaily from "modules/TaskDaily.js";
-import TodoFormNew from "modules/TodoFormNew.js";
+import Page from "node/Page.js";
+import Loading from "node/Loading.js";
+import Tabs from "node/Tabs.js";
+import TodoItem from "node/task/TodoItem.js";
+import TaskDaily from "node/task/TaskDaily.js";
+import TodoFormNew from "node/task/TodoFormNew.js";
 
 const TASK_TYPE_CREATE = 'daily';
 const TASK_TYPE_FETCH = 'dailys';

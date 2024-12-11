@@ -1,9 +1,9 @@
 import TaskService from "services/TaskService.js";
-import Page from "modules/Page.js";
-import Loading from "modules/Loading.js";
-import Tabs from "modules/Tabs.js";
-import TaskTodo from "modules/TaskTodo.js";
-import TodoFormNew from "modules/TodoFormNew.js";
+import Page from "node/Page.js";
+import Loading from "node/Loading.js";
+import Tabs from "node/Tabs.js";
+import TaskTodo from "node/task/TaskTodo.js";
+import TodoFormNew from "node/task/TodoFormNew.js";
 
 
 const taskService = new TaskService();

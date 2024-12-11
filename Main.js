@@ -1,8 +1,8 @@
-import Loading from "modules/Loading.js";
-import NavItem from "modules/NavItem.js";
-import TaskTodosPage from "pages/TaskTodosPage.js";
-import TaskDailiesPage from "pages/TaskDailiesPage.js";
-import HabitsPage from "pages/HabitsPage.js";
+import Loading from "node/Loading.js";
+import NavItem from "node/NavItem.js";
+import TaskTodosPage from "page/TaskTodosPage.js";
+import TaskDailiesPage from "page/TaskDailiesPage.js";
+import TaskHabitsPage from "page/TaskHabitsPage.js";
 
 export default Ractive.extend({
   components: {
@@ -10,14 +10,14 @@ export default Ractive.extend({
     NavItem,
     TaskTodosPage,
     TaskDailiesPage,
-    HabitsPage,
+    TaskHabitsPage,
   },
   data () {
     return {
       pages: [
         { key: "#/todos",   title: "Todos",   partial: '<TaskTodosPage />'   },
         { key: "#/dailies", title: "Dailies", partial: '<TaskDailiesPage />' },
-        { key: "#/habits",  title: "Habits",  partial: '<HabitsPage />'      },
+        { key: "#/habits",  title: "Habits",  partial: '<TaskHabitsPage />'      },
       ],
       page: null,
     };

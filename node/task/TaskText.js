@@ -7,6 +7,7 @@ const TaskText = Ractive.extend({
       word-wrap: break-word;
       white-space: pre-wrap;
       overflow-wrap: break-word;
+      margin-right: 7px;
     }
 
     .task-text.mute {

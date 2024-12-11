@@ -1,8 +1,8 @@
 import TaskService from "services/TaskService.js"; 
-import TaskItem from "modules/TaskItem.js";
-import TaskCheck from "modules/TaskCheck.js";
-import TaskText from "modules/TaskText.js";
-import TaskDue from "modules/TaskDue.js";
+import TaskItem from "node/task/TaskItem.js";
+import TaskCheck from "node/task/TaskCheck.js";
+import TaskText from "node/task/TaskText.js";
+import TaskDue from "node/task/TaskDue.js";
 
 const taskService = new TaskService();
 

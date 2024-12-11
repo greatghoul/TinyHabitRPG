@@ -1,21 +1,21 @@
 import TaskService from "services/TaskService.js";
-import Page from "modules/Page.js";
-import Loading from "modules/Loading.js";
-import Tabs from "modules/Tabs.js";
-import TodoItem from "modules/TodoItem.js";
-import TodoFormNew from "modules/TodoFormNew.js";
+import Page from "node/Page.js";
+import Loading from "node/Loading.js";
+import Tabs from "node/Tabs.js";
+import TaskHabit from "node/task/TaskHabit.js";
+import TodoFormNew from "node/task/TodoFormNew.js";
 
 const TASK_TYPE = 'habit';
 
 const taskService = new TaskService();
 
-const HabitsPage = Page.extend({
+export default Ractive.extend({
   components: {
     Page,
     Loading,
     Tabs,
     TodoFormNew,
-    TodoItem,
+    TaskHabit,
   },
   data: function() {
     return {
@@ -43,7 +43,7 @@ const HabitsPage = Page.extend({
         {{#if loaded}}
           <ul class="todo-list">
             {{#each tasks as task: index}}
-              <TodoItem todo={{task}} position={{index}} />
+              <TaskHabit task={{task}} position={{index}} />
             {{/each}}
           </ul>
         {{else}}
@@ -91,5 +91,3 @@ const HabitsPage = Page.extend({
       .then(() => this.set('fetching', false));
   }
 });
-
-export default HabitsPage;
