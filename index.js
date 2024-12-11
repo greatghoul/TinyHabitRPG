@@ -16,12 +16,6 @@ new Ractive({
   `,
   oninit: function() {
     this.loadUser();
-    // const hashChanged = () => {
-    //   const path = window.location.hash || "#/auth";
-    //   this.resetPartial("page", routes[path]);
-    // };
-    // window.addEventListener("hashchange", hashChanged, false);
-    // hashChanged();
   },
   loadUser () {
     const user = window.localStorage["user"];

@@ -10,6 +10,7 @@ const Loading = Ractive.extend({
       display: flex;
       flex-direction: column;
       align-items: center;
+      margin: 30px auto;
     }
     .loading-spinner {
       border: 16px solid #f3f3f3;

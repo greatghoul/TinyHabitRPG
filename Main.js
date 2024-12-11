@@ -1,3 +1,4 @@
+import Loading from "modules/Loading.js";
 import NavItem from "modules/NavItem.js";
 import TaskTodosPage from "pages/TaskTodosPage.js";
 import TaskDailiesPage from "pages/TaskDailiesPage.js";
@@ -5,6 +6,7 @@ import HabitsPage from "pages/HabitsPage.js";
 
 export default Ractive.extend({
   components: {
+    Loading,
     NavItem,
     TaskTodosPage,
     TaskDailiesPage,
@@ -36,7 +38,7 @@ export default Ractive.extend({
     window.addEventListener("hashchange", () => this.loadPage(), false);
   },
   partials: {
-    page: 'Loading...',
+    page: '<Loading />',
   },
   template: `
     <div class="main">
