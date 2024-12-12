@@ -83,23 +83,21 @@ const TaskHabit = Ractive.extend({
       {{/partial}}
     </TaskItem>
   `,
-  data: function () {
+  data () {
     return {
       task: null,
       position: null,
     }
   },
   on: {
-    init () {
-      const task = this.get("task")
-    },
     scoreTask (ctx, direction) {
-      const task = this.get("task");
-      const position = this.get("position");
-      const taskId = task.id;
+      const task = this.get("task")
+      const taskId = task.id
       taskService.scoreTask({ taskId, direction })
+        .then(() => taskService.getTask(task.id))
+        .then((task) => this.set({ task }))
     },
   }
-});
+})
 
-export default TaskHabit;
+export default TaskHabit
