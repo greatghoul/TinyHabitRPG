@@ -12,16 +12,10 @@ const TaskTodo = Ractive.extend({
     TaskText
   },
   template: `
-    <TaskItem>
+    <TaskItem task={{task}}>
       {{#partial head}}
         <TaskCheck checked="{{task.completed}}" disabled={{task.holding}} on-check="handleCheck" />
       {{/partial}}
-
-      {{#partial body}}
-        <TaskText text={{task.text}} mute={{task.completed}} />
-      {{/partial}}
-
-      {{#partial tail}}{{/partial}}
     </TaskItem>
   `,
   data: function () {

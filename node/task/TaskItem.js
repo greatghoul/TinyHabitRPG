@@ -1,15 +1,22 @@
+import Icon from "node/text/Icon.js"
+import TaskText from "node/task/TaskText.js";
+
 const TaskItem = Ractive.extend({
+  components: { Icon, TaskText },
+  partials: { head: [], body: [], tail: [] },
   template: `
     <li class="task-item">
       <div class="row">
-        <div class="col">
-          {{ yield head }}
+        <div class="col task-item-head">
+          {{yield head }}
         </div>
-        <div class="col" style="flex-grow: 1">
-          {{ yield body }}
+        <div class="col task-item-body" style="flex-grow: 1">
+          <TaskText text={{task.text}} mute={{task.completed}} />
+          {{yield body }}
         </div>
-        <div class="col">
-          {{ yield tail }}
+        <div class="col task-item-tail">
+          {{yield tail }}
+          <a class="text-danger"><Icon icon="trash" /></a>
         </div>
       </div>
     </li>
@@ -41,6 +48,14 @@ const TaskItem = Ractive.extend({
       align-items: center;
       justify-content: flex-start;
       padding: 0 3px;
+    }
+
+    .task-item-tail {
+      display: none;
+    }
+
+    .task-item:hover .task-item-tail {
+      display: block;
     }
   `
 });
