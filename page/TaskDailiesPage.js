@@ -1,13 +1,11 @@
-import TaskService from "services/TaskService.js";
-import Page from "node/Page.js";
-import Loading from "node/Loading.js";
-import Tabs from "node/Tabs.js";
-import TodoItem from "node/task/TodoItem.js";
-import TaskDaily from "node/task/TaskDaily.js";
-import TodoFormNew from "node/task/TodoFormNew.js";
+import TaskService from "services/TaskService.js"
+import Page from "node/Page.js"
+import Loading from "node/Loading.js"
+import Tabs from "node/Tabs.js"
+import TaskDaily from "node/task/TaskDaily.js"
+import TodoFormNew from "node/task/TodoFormNew.js"
 
-const TASK_TYPE_CREATE = 'daily';
-const TASK_TYPE_FETCH = 'dailys';
+const TASK_TYPE = 'daily'
 
 const taskService = new TaskService();
 
@@ -17,19 +15,24 @@ const TaskDailiesPage = Page.extend({
     Loading,
     Tabs,
     TodoFormNew,
-    TodoItem,
     TaskDaily,
   },
   data: function() {
     return {
       fetching: false,
-      loaded: false,
-      todos: [],
+      tasks: null,
       tabs: [
         { title: 'New', key: 'taskNew' },
         // { title: 'Search', key: 'taskSearch' },
       ],
     };
+  },
+  computed: {
+    dailies () {
+      return this.get("tasks")
+        .filter(x => x.type == TASK_TYPE && x.isDue)
+        .sort((a, b) => new Date(a.nextDue[0]) - new Date(b.nextDue[0]))
+    }
   },
   template: `
     <Page title="Dailies">
@@ -43,10 +46,10 @@ const TaskDailiesPage = Page.extend({
             <TodoFormNew />
           {{/partial}}
         </Tabs>
-        {{#if loaded}}
+        {{#if tasks != null}}
           <h4 class="tasks-list-title">Due Today</h4>
           <ul class="todo-list">
-            {{#each tasks as task: index}}
+            {{#each dailies as task: index}}
               <TaskDaily task={{task}} position={{index}} />
             {{/each}}
           </ul>
@@ -63,9 +66,6 @@ const TaskDailiesPage = Page.extend({
     }
   `,
   on: {
-    init() {
-      this.fetchTasks().then(() => this.set("loaded", true))
-    },
     refresh: function (ctx) {
       this.fetchTasks();
     },
@@ -87,19 +87,10 @@ const TaskDailiesPage = Page.extend({
     return taskService
       .createUserTask({ type, text })
       .then(task => {
-        const index = this.get("tasks").findIndex(x => x.id == taskHolder.id);
-        this.splice("tasks", index, 1, task);
-      });
+        const index = this.get("tasks").findIndex(x => x.id == taskHolder.id)
+        this.splice("tasks", index, 1, task)
+      })
   },
-  fetchTasks: function () {
-    this.set('fetching', true);
-    return taskService
-      .getUserTasks({ type: TASK_TYPE_FETCH })
-      .then(tasks => tasks.filter(task => task.isDue))
-      .then(tasks => tasks.sort((a, b) => new Date(a.nextDue[0]) - new Date(b.nextDue[0])))
-      .then(tasks => this.set({ tasks }))
-      .then(() => this.set('fetching', false));
-  }
-});
+})
 
-export default TaskDailiesPage;
+export default TaskDailiesPage

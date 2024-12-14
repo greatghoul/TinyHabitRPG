@@ -20,13 +20,18 @@ export default Ractive.extend({
   data: function() {
     return {
       fetching: false,
-      loaded: false,
-      todos: [],
+      tasks: null,
       tabs: [
         { title: 'New', key: 'taskNew' },
         // { title: 'Search', key: 'taskSearch' },
       ],
     };
+  },
+  computed: {
+    habits () {
+      const tasks = this.get("tasks")
+      return tasks.filter(x => x.type == TASK_TYPE)
+    }
   },
   template: `
     <Page title="Habits">
@@ -40,9 +45,9 @@ export default Ractive.extend({
             <TodoFormNew />
           {{/partial}}
         </Tabs>
-        {{#if loaded}}
+        {{#if tasks != null}}
           <ul class="todo-list">
-            {{#each tasks as task: index}}
+            {{#each habits as task: index}}
               <TaskHabit task={{task}} position={{index}} />
             {{/each}}
           </ul>
@@ -52,12 +57,7 @@ export default Ractive.extend({
       {{/partial}}
     </Page>
   `,
-  css: `
-  `,
   on: {
-    init() {
-      this.fetchTasks().then(() => this.set("loaded", true))
-    },
     refresh: function (ctx) {
       this.fetchTasks();
     },

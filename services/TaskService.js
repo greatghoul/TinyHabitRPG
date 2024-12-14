@@ -20,6 +20,10 @@ class TaskService extends Habitica {
   moveTask ({ taskId, position }) {
     return this.api().post(`/tasks/${taskId}/move/to/${position}`)
   }
+
+  deleteTask ({ taskId }) {
+    return this.api().delete(`/tasks/${taskId}`)
+  }
 }
 
 export default TaskService

@@ -1,9 +1,25 @@
+import TaskService from "services/TaskService.js";
+
 import Icon from "node/text/Icon.js"
-import TaskText from "node/task/TaskText.js";
+import TaskText from "node/task/TaskText.js"
+
+const taskService = new TaskService()
 
 const TaskItem = Ractive.extend({
   components: { Icon, TaskText },
   partials: { head: [], body: [], tail: [] },
+  data () {
+    return {
+      task: null,
+    }
+  },
+  on: {
+    deleteTask (ctx) {
+      const task = this.get("task")
+      taskService.deleteTask({ taskId: task.id })
+        .then(() => this.fire("taskDeleted", task))
+    }
+  },
   template: `
     <li class="task-item">
       <div class="row">
@@ -16,7 +32,7 @@ const TaskItem = Ractive.extend({
         </div>
         <div class="col task-item-tail">
           {{yield tail }}
-          <a class="text-danger"><Icon icon="trash" /></a>
+          <a class="text-danger" on-click="deleteTask"><Icon icon="trash" /></a>
         </div>
       </div>
     </li>
