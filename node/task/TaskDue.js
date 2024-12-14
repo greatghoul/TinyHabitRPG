@@ -17,7 +17,6 @@ const TaskDue = Ractive.extend({
     },
     dueDate () {
       const due = this.get('due');
-      return due;
       return format(due, 'yyyy-MM-dd, E');
     },
   }

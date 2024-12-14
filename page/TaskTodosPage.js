@@ -1,10 +1,11 @@
-import TaskService from "services/TaskService.js"
 import Page from "node/Page.js"
 import Loading from "node/Loading.js"
 import Tabs from "node/Tabs.js"
 import TaskTodo from "node/task/TaskTodo.js"
 import TaskRefreshButton from "node/task/TaskRefreshButton.js"
 import TodoFormNew from "node/task/TodoFormNew.js"
+
+const TASK_TYPE = "todo"
 
 const TaskTodosPage = Ractive.extend({
   components: {
@@ -27,7 +28,7 @@ const TaskTodosPage = Ractive.extend({
   computed: {
     todos () {
       const tasks = this.get("tasks")
-      return tasks.filter(x => x.type == "todo")
+      return tasks && tasks.filter(x => x.type == TASK_TYPE)
     }
   },
   template: `
@@ -42,7 +43,7 @@ const TaskTodosPage = Ractive.extend({
             <TodoFormNew />
           {{/partial}}
         </Tabs>
-        {{#if tasks != null}}
+        {{#if tasks}}
           <ul class="todo-list" style="vertical-scroll: auto;">
             {{#each todos as task: index}}
               <TaskTodo task={{task}} position={{index}} />
@@ -58,26 +59,8 @@ const TaskTodosPage = Ractive.extend({
   `,
   on: {
     "TodoFormNew.submit": function (ctx, text) {
-      this.createTask(text)
+      this.fire("createTask", {}, { text, type: TASK_TYPE })
     },
-  },
-  createTask: function (text) {
-    const type = "todo"
-    const taskHolder = {
-      text,
-      id: TaskService.randomToken("todo"),
-      completed: false,
-      holding: true
-    };
-
-    this.unshift("tasks", taskHolder)
-
-    return TaskService
-      .createUserTask({ type, text })
-      .then(todo => {
-        const index = this.get("tasks").findIndex(x => x.id == taskHolder.id)
-        this.splice("tasks", index, 1, todo)
-      });
   },
 })
 

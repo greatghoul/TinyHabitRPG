@@ -29,7 +29,8 @@ const TaskDailiesPage = Page.extend({
   },
   computed: {
     dailies () {
-      return this.get("tasks")
+      let tasks = this.get("tasks")
+      return tasks && tasks
         .filter(x => x.type == TASK_TYPE && x.isDue)
         .sort((a, b) => new Date(a.nextDue[0]) - new Date(b.nextDue[0]))
     }
@@ -46,7 +47,7 @@ const TaskDailiesPage = Page.extend({
             <TodoFormNew />
           {{/partial}}
         </Tabs>
-        {{#if tasks != null}}
+        {{#if tasks}}
           <h4 class="tasks-list-title">Due Today</h4>
           <ul class="todo-list">
             {{#each dailies as task: index}}
@@ -67,26 +68,8 @@ const TaskDailiesPage = Page.extend({
   `,
   on: {
     "TodoFormNew.submit": function (ctx, text) {
-      this.createTask(text);
+      this.fire("createTask", {}, { text, type: TASK_TYPE })
     },
-  },
-  createTask: function (text) {
-    const type = TASK_TYPE_CREATE;
-    const taskHolder = {
-      text,
-      id: TaskService.randomToken(TASK_TYPE_CREATE),
-      completed: false,
-      holding: true
-    };
-
-    this.unshift("tasks", taskHolder);
-
-    return TaskService
-      .createUserTask({ type, text })
-      .then(task => {
-        const index = this.get("tasks").findIndex(x => x.id == taskHolder.id)
-        this.splice("tasks", index, 1, task)
-      })
   },
 })
 

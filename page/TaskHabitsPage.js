@@ -1,4 +1,3 @@
-import TaskService from "services/TaskService.js"
 import Page from "node/Page.js"
 import Loading from "node/Loading.js"
 import Tabs from "node/Tabs.js"
@@ -19,7 +18,6 @@ export default Ractive.extend({
   },
   data: function() {
     return {
-      fetching: false,
       tasks: null,
       tabs: [
         { title: 'New', key: 'taskNew' },
@@ -30,7 +28,7 @@ export default Ractive.extend({
   computed: {
     habits () {
       const tasks = this.get("tasks")
-      return tasks.filter(x => x.type == TASK_TYPE)
+      return tasks && tasks.filter(x => x.type == TASK_TYPE)
     }
   },
   template: `
@@ -45,7 +43,7 @@ export default Ractive.extend({
             <TodoFormNew />
           {{/partial}}
         </Tabs>
-        {{#if tasks != null}}
+        {{#if tasks}}
           <ul class="todo-list">
             {{#each habits as task: index}}
               <TaskHabit task={{task}} position={{index}} />
@@ -59,25 +57,7 @@ export default Ractive.extend({
   `,
   on: {
     "TodoFormNew.submit": function (ctx, text) {
-      this.createTask(text);
+      this.fire("createTask", {}, { text, type: TASK_TYPE })
     },
-  },
-  createTask: function (text) {
-    const type = TASK_TYPE;
-    const taskHolder = {
-      text,
-      id: TaskService.randomToken(TASK_TYPE),
-      completed: false,
-      holding: true
-    };
-
-    this.unshift('tasks', taskHolder);
-
-    return TaskService
-      .createUserTask({ type, text })
-      .then(task => {
-        const index = this.get('tasks').findIndex(x => x.id == taskHolder.id);
-        this.splice('tasks', index, 1, task);
-      });
   },
 });

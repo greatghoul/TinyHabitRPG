@@ -1,3 +1,4 @@
+import { endOfDay, formatISO } from "date-fns"
 import TaskService from "services/TaskService.js"
 
 import Loading from "node/Loading.js"
@@ -33,6 +34,12 @@ export default Ractive.extend({
     },
     "*.refreshTasks" () {
       this.loadTasks()
+    },
+    "*.createTask" (ctx, params) {
+      this.createTask(params)
+    },
+    "*.deleteTask" (ctx, task) {
+      this.deleteTask(task)
     }
   },
   loadPage () {
@@ -49,6 +56,39 @@ export default Ractive.extend({
     TaskService.getUserTasks({})
       .then(tasks => this.set({ tasks }))
       .finally(() => Ractive.sharedSet("fetchingTasks", false))
+  },
+  createTask(params) {
+    const taskHolder = {
+      id: TaskService.randomToken(params.type),
+      type: params.type,
+      text: params.text,
+      holding: true,
+      // for todo
+      completed: false,
+      // for habit
+      up: false,
+      down: false,
+      counterUp: 0,
+      counterDown: 0,
+      // for daily
+      isDue: true,
+      nextDue: [formatISO(endOfDay(new Date()))],
+    }
+    console.log(taskHolder)
+    this.unshift("tasks", taskHolder)
+
+    return TaskService
+      .createUserTask(params)
+      .then(task => {
+        const index = this.get("tasks").findIndex(x => x.id == taskHolder.id)
+        this.splice("tasks", index, 1, task)
+      })
+  },
+  deleteTask (task) {
+    const tasks = this.get("tasks")
+    const index = tasks.findIndex(x => x.id == task.id)
+    this.splice("tasks", index, 1)
+    TaskService.deleteTask({ taskId: task.id })
   },
   template: `
     <div class="main">
