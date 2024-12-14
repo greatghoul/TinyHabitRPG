@@ -1,10 +1,8 @@
-import TaskService from "services/TaskService.js"; 
-import TaskItem from "node/task/TaskItem.js";
-import TaskCheck from "node/task/TaskCheck.js";
-import TaskText from "node/task/TaskText.js";
-import TaskDue from "node/task/TaskDue.js";
-
-const taskService = new TaskService();
+import TaskService from "services/TaskService.js"
+import TaskItem from "node/task/TaskItem.js"
+import TaskCheck from "node/task/TaskCheck.js"
+import TaskText from "node/task/TaskText.js"
+import TaskDue from "node/task/TaskDue.js"
 
 const TaskDaily = Ractive.extend({
   components: {
@@ -32,8 +30,8 @@ const TaskDaily = Ractive.extend({
       const position = this.get("position");
       const taskId = task.id;
       const direction = checked ? "up" : "down";
-      taskService.scoreTask({ taskId, direction })
-        .then(() => !task.completed && taskService.moveTask({ taskId, position }))
+      TaskService.scoreTask({ taskId, direction })
+        .then(() => !task.completed && TaskService.moveTask({ taskId, position }))
     },
   }
 });

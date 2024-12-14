@@ -26,4 +26,4 @@ class TaskService extends Habitica {
   }
 }
 
-export default TaskService
+export default new TaskService

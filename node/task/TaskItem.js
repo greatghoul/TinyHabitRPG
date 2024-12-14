@@ -3,8 +3,6 @@ import TaskService from "services/TaskService.js";
 import Icon from "node/text/Icon.js"
 import TaskText from "node/task/TaskText.js"
 
-const taskService = new TaskService()
-
 const TaskItem = Ractive.extend({
   components: { Icon, TaskText },
   partials: { head: [], body: [], tail: [] },
@@ -16,7 +14,7 @@ const TaskItem = Ractive.extend({
   on: {
     deleteTask (ctx) {
       const task = this.get("task")
-      taskService.deleteTask({ taskId: task.id })
+      TaskService.deleteTask({ taskId: task.id })
         .then(() => this.fire("taskDeleted", task))
     }
   },

@@ -3,8 +3,6 @@ import TaskItem from "node/task/TaskItem.js";
 import TaskCheck from "node/task/TaskCheck.js";
 import TaskText from "node/task/TaskText.js";
 
-const taskService = new TaskService();
-
 const TaskTodo = Ractive.extend({
   components: {
     TaskItem,
@@ -30,8 +28,8 @@ const TaskTodo = Ractive.extend({
       const position = this.get("position");
       const taskId = task.id;
       const direction = checked ? "up" : "down";
-      taskService.scoreTask({ taskId, direction })
-        .then(() => !task.completed && taskService.moveTask({ taskId, position }))
+      TaskService.scoreTask({ taskId, direction })
+        .then(() => !task.completed && TaskService.moveTask({ taskId, position }))
     },
   }
 });

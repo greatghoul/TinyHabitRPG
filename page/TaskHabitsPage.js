@@ -1,13 +1,12 @@
-import TaskService from "services/TaskService.js";
-import Page from "node/Page.js";
-import Loading from "node/Loading.js";
-import Tabs from "node/Tabs.js";
-import TaskHabit from "node/task/TaskHabit.js";
-import TodoFormNew from "node/task/TodoFormNew.js";
+import TaskService from "services/TaskService.js"
+import Page from "node/Page.js"
+import Loading from "node/Loading.js"
+import Tabs from "node/Tabs.js"
+import TaskHabit from "node/task/TaskHabit.js"
+import TodoFormNew from "node/task/TodoFormNew.js"
+import TaskRefreshButton from "node/task/TaskRefreshButton.js"
 
 const TASK_TYPE = 'habit';
-
-const taskService = new TaskService();
 
 export default Ractive.extend({
   components: {
@@ -16,6 +15,7 @@ export default Ractive.extend({
     Tabs,
     TodoFormNew,
     TaskHabit,
+    TaskRefreshButton,
   },
   data: function() {
     return {
@@ -36,7 +36,7 @@ export default Ractive.extend({
   template: `
     <Page title="Habits">
       {{#partial page_action}}
-        <button on-click="refresh" disabled="{{fetching}}">Refresh</button>
+        <TaskRefreshButton />
       {{/partial}}
       
       {{#partial page_body}}
@@ -58,9 +58,6 @@ export default Ractive.extend({
     </Page>
   `,
   on: {
-    refresh: function (ctx) {
-      this.fetchTasks();
-    },
     "TodoFormNew.submit": function (ctx, text) {
       this.createTask(text);
     },
@@ -69,25 +66,18 @@ export default Ractive.extend({
     const type = TASK_TYPE;
     const taskHolder = {
       text,
-      id: taskService.randomToken(TASK_TYPE),
+      id: TaskService.randomToken(TASK_TYPE),
       completed: false,
       holding: true
     };
 
     this.unshift('tasks', taskHolder);
 
-    return taskService
+    return TaskService
       .createUserTask({ type, text })
       .then(task => {
         const index = this.get('tasks').findIndex(x => x.id == taskHolder.id);
         this.splice('tasks', index, 1, task);
       });
   },
-  fetchTasks: function () {
-    this.set('fetching', true);
-    return taskService
-      .getUserTasks({ type: 'habits' })
-      .then(tasks => this.set({ tasks }))
-      .then(() => this.set('fetching', false));
-  }
 });

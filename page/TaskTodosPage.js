@@ -3,9 +3,8 @@ import Page from "node/Page.js"
 import Loading from "node/Loading.js"
 import Tabs from "node/Tabs.js"
 import TaskTodo from "node/task/TaskTodo.js"
+import TaskRefreshButton from "node/task/TaskRefreshButton.js"
 import TodoFormNew from "node/task/TodoFormNew.js"
-
-const taskService = new TaskService()
 
 const TaskTodosPage = Ractive.extend({
   components: {
@@ -14,10 +13,10 @@ const TaskTodosPage = Ractive.extend({
     Tabs,
     TodoFormNew,
     TaskTodo,
+    TaskRefreshButton,
   },
   data: function() {
     return {
-      fetching: false,
       tasks: null,
       tabs: [
         { title: "New", key: "taskNew" },
@@ -34,7 +33,7 @@ const TaskTodosPage = Ractive.extend({
   template: `
     <Page title="Todos">
       {{#partial page_action}}
-        <button on-click="refresh" disabled="{{fetching}}">Refresh</button>
+        <TaskRefreshButton />
       {{/partial}}
       
       {{#partial page_body}}
@@ -58,9 +57,6 @@ const TaskTodosPage = Ractive.extend({
   css: `
   `,
   on: {
-    refresh: function (ctx) {
-      this.fetchTasks()
-    },
     "TodoFormNew.submit": function (ctx, text) {
       this.createTask(text)
     },
@@ -69,14 +65,14 @@ const TaskTodosPage = Ractive.extend({
     const type = "todo"
     const taskHolder = {
       text,
-      id: taskService.randomToken("todo"),
+      id: TaskService.randomToken("todo"),
       completed: false,
       holding: true
     };
 
     this.unshift("tasks", taskHolder)
 
-    return taskService
+    return TaskService
       .createUserTask({ type, text })
       .then(todo => {
         const index = this.get("tasks").findIndex(x => x.id == taskHolder.id)

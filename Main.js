@@ -6,8 +6,6 @@ import TaskTodosPage from "page/TaskTodosPage.js"
 import TaskDailiesPage from "page/TaskDailiesPage.js"
 import TaskHabitsPage from "page/TaskHabitsPage.js"
 
-const taskService = new TaskService()
-
 export default Ractive.extend({
   components: {
     Loading,
@@ -24,7 +22,6 @@ export default Ractive.extend({
         { key: "#/habits", title: "Habits" },
       ],
       page: null,
-      fetching: false,
       tasks: null,
     };
   },
@@ -33,25 +30,25 @@ export default Ractive.extend({
       this.loadPage()
       this.listenPage()
       this.loadTasks()
+    },
+    "*.refreshTasks" () {
+      this.loadTasks()
     }
   },
   loadPage () {
     const pages = this.get('pages');
     const page = pages.find(x => x.key == window.location.hash) || pages[0];
     this.set({ page });
-    // this.resetPartial("page", page.partial);
   },
   listenPage () {
     window.addEventListener("hashchange", () => this.loadPage(), false);
   },
   loadTasks () {
+    Ractive.sharedSet("fetchingTasks", true)
     this.set("fetching", true)
-    taskService.getUserTasks({})
+    TaskService.getUserTasks({})
       .then(tasks => this.set({ tasks }))
-      .finally(() => this.set("fetching", false))
-  },
-  partials: {
-    page: '<Loading />',
+      .finally(() => Ractive.sharedSet("fetchingTasks", false))
   },
   template: `
     <div class="main">
@@ -65,11 +62,11 @@ export default Ractive.extend({
       </div>
       <div class="body">
         {{#if page.key == "#/todos"}}
-          <TaskTodosPage tasks={{tasks}} fetching={{fetching}} />
+          <TaskTodosPage tasks={{tasks}} />
         {{elseif page.key == "#/dailies"}}
-          <TaskDailiesPage tasks={{tasks}} fetching={{fetching}} />
+          <TaskDailiesPage tasks={{tasks}} />
         {{elseif page.key == "#/habits"}}
-          <TaskHabitsPage tasks={{tasks}} fetching={{fetching}} />
+          <TaskHabitsPage tasks={{tasks}} />
         {{/if}}
       </div>
     </div>

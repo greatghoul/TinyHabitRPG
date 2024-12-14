@@ -4,10 +4,9 @@ import Loading from "node/Loading.js"
 import Tabs from "node/Tabs.js"
 import TaskDaily from "node/task/TaskDaily.js"
 import TodoFormNew from "node/task/TodoFormNew.js"
+import TaskRefreshButton from "node/task/TaskRefreshButton.js"
 
 const TASK_TYPE = 'daily'
-
-const taskService = new TaskService();
 
 const TaskDailiesPage = Page.extend({
   components: {
@@ -16,6 +15,7 @@ const TaskDailiesPage = Page.extend({
     Tabs,
     TodoFormNew,
     TaskDaily,
+    TaskRefreshButton,
   },
   data: function() {
     return {
@@ -37,7 +37,7 @@ const TaskDailiesPage = Page.extend({
   template: `
     <Page title="Dailies">
       {{#partial page_action}}
-        <button on-click="refresh" disabled="{{fetching}}">Refresh</button>
+        <TaskRefreshButton />
       {{/partial}}
       
       {{#partial page_body}}
@@ -66,9 +66,6 @@ const TaskDailiesPage = Page.extend({
     }
   `,
   on: {
-    refresh: function (ctx) {
-      this.fetchTasks();
-    },
     "TodoFormNew.submit": function (ctx, text) {
       this.createTask(text);
     },
@@ -77,14 +74,14 @@ const TaskDailiesPage = Page.extend({
     const type = TASK_TYPE_CREATE;
     const taskHolder = {
       text,
-      id: taskService.randomToken(TASK_TYPE_CREATE),
+      id: TaskService.randomToken(TASK_TYPE_CREATE),
       completed: false,
       holding: true
     };
 
     this.unshift("tasks", taskHolder);
 
-    return taskService
+    return TaskService
       .createUserTask({ type, text })
       .then(task => {
         const index = this.get("tasks").findIndex(x => x.id == taskHolder.id)

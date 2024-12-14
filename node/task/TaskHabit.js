@@ -4,8 +4,6 @@ import TaskItem from "node/task/TaskItem.js"
 import TaskText from "node/task/TaskText.js"
 import HabitAdjuster from "node/task/HabitAdjuster.js"
 
-const taskService = new TaskService()
-
 const TaskHabit = Ractive.extend({
   components: {
     Tag,
@@ -35,8 +33,8 @@ const TaskHabit = Ractive.extend({
     scoreTask (ctx, direction) {
       const task = this.get("task")
       const taskId = task.id
-      taskService.scoreTask({ taskId, direction })
-        .then(() => taskService.getTask(task.id))
+      TaskService.scoreTask({ taskId, direction })
+        .then(() => TaskService.getTask(task.id))
         .then((task) => this.set({ task }))
     },
   }
