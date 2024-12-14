@@ -1,4 +1,4 @@
-const LoginPage = Ractive.extend({
+export default Ractive.extend({
   data() {
     return {
       username: '',
@@ -34,10 +34,10 @@ const LoginPage = Ractive.extend({
       })
         .then(res => res.json())
         .then(data => {
-          console.log('success', data);
           if (data.success) {
-            window.localStorage.setItem('user', JSON.stringify(data.data));
-            window.location.hash = '#/home';
+            const user = data.data;
+            window.localStorage.setItem('user', JSON.stringify(user));
+            this.fire('login', user);
           } else {
             console.error(data.message);
             window.alert(data.message);
@@ -50,5 +50,3 @@ const LoginPage = Ractive.extend({
     }
   },
 });
-
-export default LoginPage;

@@ -1,32 +1,24 @@
-import LoginPage from 'pages/LoginPage.js';
-import HomePage from 'pages/HomePage.js';
-import AuthPage from 'pages/AuthPage.js';
+import Auth from "./Auth.js";
+import Main from "./Main.js";
 
-const routes = {
-  '#/auth': '<AuthPage />',
-  '#/login': '<LoginPage />',
-  '#/home': '<HomePage />',
-}
-
-const App = new Ractive({
-  el: 'main',
+new Ractive({
+  components: { Auth, Main },
+  el: "main",
+  data: {
+    user: null,
+  },
   template: `
-    {{>page}}
+    {{#if user}}
+      <Main />
+    {{else}}
+      <Auth on-login="@this.loadUser()" />
+    {{/if}}
   `,
-  partials: {
-    page: '<AuthPage />'
-  },
-  components: {
-    LoginPage,
-    HomePage,
-    AuthPage,
-  },
   oninit: function() {
-    const hashChanged = () => {
-      const path = window.location.hash || '#/auth';
-      this.resetPartial('page', routes[path]);
-    };
-    window.addEventListener('hashchange', hashChanged, false);
-    hashChanged();
+    this.loadUser();
+  },
+  loadUser () {
+    const user = window.localStorage["user"];
+    this.set({ user });
   }
 });
