@@ -3,7 +3,7 @@ import Loading from "node/Loading.js"
 import Tabs from "node/Tabs.js"
 import TaskTodo from "node/task/TaskTodo.js"
 import TaskRefreshButton from "node/task/TaskRefreshButton.js"
-import TodoFormNew from "node/task/TodoFormNew.js"
+import TaskNew from "node/task/TaskNew.js"
 
 const TASK_TYPE = "todo"
 
@@ -12,7 +12,7 @@ const TaskTodosPage = Ractive.extend({
     Page,
     Loading,
     Tabs,
-    TodoFormNew,
+    TaskNew,
     TaskTodo,
     TaskRefreshButton,
   },
@@ -40,7 +40,7 @@ const TaskTodosPage = Ractive.extend({
       {{#partial page_body}}
         <Tabs tabs={{tabs}}>
           {{#partial taskNew}}
-            <TodoFormNew type="${TASK_TYPE}"/>
+            <TaskNew type="${TASK_TYPE}"/>
           {{/partial}}
         </Tabs>
         {{#if tasks}}

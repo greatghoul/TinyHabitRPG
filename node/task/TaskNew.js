@@ -1,4 +1,4 @@
-const TodoFormNew = Ractive.extend({
+const TaskNew = Ractive.extend({
   data: function() {
     return {
       type: null,
@@ -29,4 +29,4 @@ const TodoFormNew = Ractive.extend({
   }
 })
 
-export default TodoFormNew
+export default TaskNew
