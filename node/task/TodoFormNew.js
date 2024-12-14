@@ -1,11 +1,12 @@
 const TodoFormNew = Ractive.extend({
   data: function() {
     return {
+      type: null,
       text: '',
     };
   },
   template: `
-    <input type="text" class="input-new" on-keydown='create' value={{text}} />
+    <input type="text" class="input-new" on-keydown='handleSubmit' value={{text}} />
   `,
   css: `
     .input-new {
@@ -15,16 +16,17 @@ const TodoFormNew = Ractive.extend({
     }
   `,
   on: {
-    create: function (ctx) {
-      if (ctx.event.key != "Enter") return;
+    handleSubmit: function (ctx) {
+      if (ctx.event.key != "Enter") return
 
-      const text = this.get("text").trim();
-      if (!text) return;
+      const text = this.get("text").trim()
+      const type = this.get("type")
+      if (!text) return
 
-      this.fire("submit", text);
-      this.set("text", "");
+      this.fire("createTask", {}, { text, type })
+      this.set("text", "")
     },
   }
-});
+})
 
-export default TodoFormNew;
+export default TodoFormNew

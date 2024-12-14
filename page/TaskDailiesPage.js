@@ -1,4 +1,3 @@
-import TaskService from "services/TaskService.js"
 import Page from "node/Page.js"
 import Loading from "node/Loading.js"
 import Tabs from "node/Tabs.js"
@@ -44,7 +43,7 @@ const TaskDailiesPage = Page.extend({
       {{#partial page_body}}
         <Tabs tabs={{tabs}}>
           {{#partial taskNew}}
-            <TodoFormNew />
+            <TodoFormNew type="${TASK_TYPE}" />
           {{/partial}}
         </Tabs>
         {{#if tasks}}
@@ -65,12 +64,7 @@ const TaskDailiesPage = Page.extend({
       margin: 0 0 5px 0;
       padding: 0;
     }
-  `,
-  on: {
-    "TodoFormNew.submit": function (ctx, text) {
-      this.fire("createTask", {}, { text, type: TASK_TYPE })
-    },
-  },
+  `
 })
 
 export default TaskDailiesPage

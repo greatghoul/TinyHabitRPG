@@ -40,7 +40,7 @@ export default Ractive.extend({
       {{#partial page_body}}
         <Tabs tabs={{tabs}}>
           {{#partial taskNew}}
-            <TodoFormNew />
+            <TodoFormNew type="${TASK_TYPE}" />
           {{/partial}}
         </Tabs>
         {{#if tasks}}
@@ -54,10 +54,5 @@ export default Ractive.extend({
         {{/if}}
       {{/partial}}
     </Page>
-  `,
-  on: {
-    "TodoFormNew.submit": function (ctx, text) {
-      this.fire("createTask", {}, { text, type: TASK_TYPE })
-    },
-  },
+  `
 });
