@@ -6,6 +6,7 @@ import NavItem from "node/NavItem.js"
 import TaskTodosPage from "page/TaskTodosPage.js"
 import TaskDailiesPage from "page/TaskDailiesPage.js"
 import TaskHabitsPage from "page/TaskHabitsPage.js"
+import FeedbackPage from "page/FeedbackPage.js"
 
 export default Ractive.extend({
   components: {
@@ -14,6 +15,7 @@ export default Ractive.extend({
     TaskTodosPage,
     TaskDailiesPage,
     TaskHabitsPage,
+    FeedbackPage,
   },
   data () {
     return {
@@ -21,6 +23,7 @@ export default Ractive.extend({
         { key: "#/todos", title: "Todos" },
         { key: "#/dailies", title: "Dailies" },
         { key: "#/habits", title: "Habits" },
+        { key: '#/feedback', title: 'Feedback' },
       ],
       page: null,
       tasks: null,
@@ -108,6 +111,7 @@ export default Ractive.extend({
         {{elseif page.key == "#/habits"}}
           <TaskHabitsPage tasks={{tasks}} />
         {{/if}}
+        <FeedbackPage visible="{{page.key == "/#/feedback"}}" />
       </div>
     </div>
   `,
