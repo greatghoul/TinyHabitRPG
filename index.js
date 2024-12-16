@@ -1,5 +1,6 @@
-import Auth from "./Auth.js";
-import Main from "./Main.js";
+import Auth from "./Auth.js"
+import Main from "./Main.js"
+import UserService from "services/UserService.js"
 
 new Ractive({
   components: { Auth, Main },
@@ -15,10 +16,11 @@ new Ractive({
     {{/if}}
   `,
   oninit: function() {
-    this.loadUser();
+    this.loadUser()
   },
   loadUser () {
-    const user = window.localStorage["user"];
-    this.set({ user });
+    if (UserService.auth()) {
+      UserService.getUser().then(user => this.set({ user }))
+    }
   }
-});
+})
