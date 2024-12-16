@@ -6,10 +6,11 @@ new Ractive({
   components: { Auth, Main },
   el: "main",
   data: {
+    auth: null,
     user: null,
   },
   template: `
-    {{#if user}}
+    {{#if auth}}
       <Main />
     {{else}}
       <Auth on-login="@this.loadUser()" />
@@ -19,8 +20,9 @@ new Ractive({
     this.loadUser()
   },
   loadUser () {
-    if (UserService.auth()) {
-      UserService.getUser().then(user => this.set({ user }))
-    }
+    const auth = UserService.auth()
+    this.set({ auth })
+
+    UserService.getUser(user => this.set({ user }))
   }
 })
