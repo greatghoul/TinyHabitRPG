@@ -2,10 +2,11 @@ const Page = Ractive.extend({
   data: function() {
     return {
       title: '',
+      hidden: false,
     }
   },
   template: `
-    <div class="page">
+    <div class="page" data-hidden="{{hidden}}">
       <div class="page-head">
         <span>{{title}}</span>
         <div class="pull-right">
@@ -25,6 +26,10 @@ const Page = Ractive.extend({
       height: 100vh;
     }
 
+    .page.hidden {
+      display: none;
+    }
+
     .pull-right {
       float: right;
     }
@@ -41,7 +46,7 @@ const Page = Ractive.extend({
 
     .page-body {
       flex: 1;
-      padding: 10px;
+      padding: 20px;
       overflow-y: auto;
     }
   `,
