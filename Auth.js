@@ -1,3 +1,5 @@
+import Cookies from "js-cookie"
+
 export default Ractive.extend({
   data() {
     return {
@@ -35,9 +37,11 @@ export default Ractive.extend({
         .then(res => res.json())
         .then(data => {
           if (data.success) {
-            const user = data.data;
-            window.localStorage.setItem('user', JSON.stringify(user));
-            this.fire('login', user);
+            const user = data.data.id
+            const key = data.data.apiToken
+            Cookies.set("user", user, { expires: 30 })
+            Cookies.set("key", key, { expires: 30 })
+            this.fire('login')
           } else {
             console.error(data.message);
             window.alert(data.message);

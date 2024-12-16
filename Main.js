@@ -77,7 +77,6 @@ export default Ractive.extend({
       isDue: true,
       nextDue: [formatISO(endOfDay(new Date()))],
     }
-    console.log(taskHolder)
     this.unshift("tasks", taskHolder)
 
     return TaskService

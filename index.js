@@ -1,24 +1,28 @@
-import Auth from "./Auth.js";
-import Main from "./Main.js";
+import Auth from "./Auth.js"
+import Main from "./Main.js"
+import UserService from "services/UserService.js"
 
 new Ractive({
   components: { Auth, Main },
   el: "main",
   data: {
+    auth: null,
     user: null,
   },
   template: `
-    {{#if user}}
+    {{#if auth}}
       <Main />
     {{else}}
       <Auth on-login="@this.loadUser()" />
     {{/if}}
   `,
   oninit: function() {
-    this.loadUser();
+    this.loadUser()
   },
   loadUser () {
-    const user = window.localStorage["user"];
-    this.set({ user });
+    const auth = UserService.auth()
+    this.set({ auth })
+
+    UserService.getUser(user => this.set({ user }))
   }
-});
+})
