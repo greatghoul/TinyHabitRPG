@@ -46,6 +46,8 @@ export default Ractive.extend({
     }
   },
   loadPage () {
+    this.loadTasks();
+
     const pages = this.get('pages');
     const page = pages.find(x => x.key == window.location.hash) || pages[0];
     this.set({ page });
