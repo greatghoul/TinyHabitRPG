@@ -17,6 +17,7 @@ class Habitica {
     if (auth) {
       headers["x-api-user"] = auth.user
       headers["x-api-key"] = auth.key
+      headers["x-client"] = `${auth.user}-TinyHabitRPG`
     }
 
     const instance = axios.create({ baseURL, headers })
